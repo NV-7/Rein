@@ -23,27 +23,37 @@ public class PlayerBehavior : MonoBehaviour
 
         if (Keyboard.current.upArrowKey.isPressed == true)
         {
-            {
-                pos.y = pos.y + speed * Time.deltaTime;
-            }
+            
+                Vector3 newPos = transform.position;
+                newPos.y = newPos.y + speed * Time.deltaTime;
+                transform.position = newPos;
+            
         }
         if (Keyboard.current.leftArrowKey.isPressed == true)
         {
-            {
-                pos.x = pos.x - speed * Time.deltaTime;
-            }
+            
+                Vector3 newPos = transform.position;
+                newPos.x = newPos.x - speed * Time.deltaTime;
+                transform.position = newPos;
+              
+            
         }
         if (Keyboard.current.downArrowKey.isPressed == true)
         {
-            {
-                pos.y = pos.y - speed * Time.deltaTime;
-            }
+            Vector3 newPos = transform.position;
+            newPos.y = newPos.y - speed * Time.deltaTime;
+            transform.position = newPos;
+            
+
         }
         if (Keyboard.current.rightArrowKey.isPressed == true)
         {
-            {
-                pos.x = pos.x + speed * Time.deltaTime;
-            }
+            Vector3 newPos = transform.position;
+            newPos.x = newPos.x + speed * Time.deltaTime;
+            transform.position = newPos;
+           
         }
     }
+    
+    
 }
