@@ -488,6 +488,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: TitleSceen
       objectReference: {fileID: 0}
+    - target: {fileID: 8827483757236965405, guid: f8c2bdba1dddeb64c925b44e02742768, type: 3}
+      propertyPath: m_text
+      value: 'Rein
+
+'
+      objectReference: {fileID: 0}
     - target: {fileID: 9044557330384153357, guid: f8c2bdba1dddeb64c925b44e02742768, type: 3}
       propertyPath: m_SizeDelta.x
       value: 10000
