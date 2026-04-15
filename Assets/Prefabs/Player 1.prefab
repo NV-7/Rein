@@ -43,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8701911755906486910}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 3252224991405807402, guid: c1b2852505b10bf42893ad4e71abc1ea, type: 3}
 --- !u!23 &5192294912939962843
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -125,6 +125,10 @@ MonoBehaviour:
   input_direction: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   rotationSpeed: 720
+  bullet: {fileID: 0}
+  point: {fileID: 0}
+  bulletSpeed: 15
+  cameraTransform: {fileID: 0}
 --- !u!54 &5482079312665089821
 Rigidbody:
   m_ObjectHideFlags: 0
