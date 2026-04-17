@@ -7,6 +7,8 @@ public class Bullet : MonoBehaviour
 
     AudioSource bulletSound;
     ParticleSystem bulletParticle;
+    private float time = 0;
+    public float despawn = 10f;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,10 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        time += Time.deltaTime;
+        if(time >= despawn)
+        {
+            Destroy(gameObject);
+        }
     }
 }
