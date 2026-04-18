@@ -37,7 +37,7 @@ public class Movement : MonoBehaviour
         playerRb.MovePosition(playerRb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
-    void lookAtMouse()
+    public void lookAtMouse()
     {
         Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
 
@@ -54,7 +54,6 @@ public class Movement : MonoBehaviour
             transform.rotation = rotation;
 
         }
-
         
     }
 
