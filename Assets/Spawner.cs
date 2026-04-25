@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -9,6 +10,7 @@ public class Spawner : MonoBehaviour
     public GameObject player;
     public float spawnRadius = 10f;
     public float time = 0f;
+    public float spawnRate = 1f;
     public GameObject cube;
     private float max_X, max_Z, min_X, min_Z, top;
 
@@ -22,13 +24,15 @@ public class Spawner : MonoBehaviour
         min_X = cubeRenderer.bounds.min.x;
         min_Z = cubeRenderer.bounds.min.z;
         top = cubeRenderer.bounds.max.y;
+
+        Debug.Log($"Spawn bounds — X: [{min_X}, {max_X}] Z: [{min_Z}, {max_Z}] Top: {top}");
     }
 
     // Update is called once per frame
     void Update()
     {
         time += Time.deltaTime;
-        if(time >= 0.5f)
+        if(time >= spawnRate)
         {
             SpawnEnemy();
             time = 0f;
@@ -39,8 +43,9 @@ public class Spawner : MonoBehaviour
     {
         float randomX = Random.Range(min_X, max_X);
         float randomZ = Random.Range(min_Z, max_Z);
-
-        Vector3 spawnPoint = new Vector3(randomX, top, randomZ);
+        Transform enemyTransform = stationary_enemy.transform;
+        float yOffset = Mathf.Abs(enemyTransform.position.y - top);
+        Vector3 spawnPoint = new Vector3(randomX, top + yOffset, randomZ);
 
         GameObject enemy = Instantiate(stationary_enemy, spawnPoint, Quaternion.identity);
 
