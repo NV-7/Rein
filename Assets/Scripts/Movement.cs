@@ -51,7 +51,7 @@ public class Movement : MonoBehaviour
             playerToMouseDirection.y = 0;
 
             Quaternion rotation = Quaternion.LookRotation(playerToMouseDirection);
-            transform.rotation = rotation;
+            playerRb.MoveRotation(rotation);
 
         }
         
