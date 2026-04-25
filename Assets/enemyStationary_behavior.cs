@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +15,6 @@ public class enemyStationary_behavior : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-
     }
 
     // Update is called once per frame
@@ -49,11 +47,5 @@ public class enemyStationary_behavior : MonoBehaviour
             health -= 25f;
             Destroy(other.gameObject);
         }
-        
-    }
-
-    private void OnDestroy()
-    {
-        Destroy(gameObject);
     }
 }

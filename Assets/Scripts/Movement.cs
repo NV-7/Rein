@@ -7,16 +7,19 @@ using UnityEngine.InputSystem;
 public class Movement : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public LayerMask collisionLayers; // Assign in Inspector to only check specific layers (e.g., Enemy, Walls)
     private Vector2 aimInput;
     private Vector2 movementInput;
     private Rigidbody playerRb;
     private Camera mainCam;
+    private BoxCollider playerCollider;
 
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         mainCam = Camera.main;
+        playerCollider = GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
@@ -34,7 +37,12 @@ public class Movement : MonoBehaviour
     void PlayerMovement()
     {
         Vector3 movement = new Vector3(movementInput.x, 0f, movementInput.y);
-        playerRb.MovePosition(playerRb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        Vector3 targetPos = playerRb.position + movement * moveSpeed * Time.fixedDeltaTime;
+
+        if(!detectCollison(targetPos))
+        {
+            playerRb.MovePosition(targetPos);
+        }
     }
 
     public void lookAtMouse()
@@ -56,6 +64,37 @@ public class Movement : MonoBehaviour
         }
         
     }
+
+
+    bool detectCollison(Vector3 targetPos)
+    {
+        Vector3 boxSize = playerCollider.size;
+        Vector3 boxCenter = targetPos + playerCollider.center;
+
+        Collider[] hits;
+        
+        // If collisionLayers is set, only check those layers
+        if(collisionLayers.value != 0)
+        {
+            hits = Physics.OverlapBox(boxCenter, boxSize / 2f, transform.rotation, collisionLayers);
+        }
+        else
+        {
+            hits = Physics.OverlapBox(boxCenter, boxSize / 2f, transform.rotation);
+        }
+
+        foreach(Collider hit in hits)
+        {
+            // Ignore the player's own collider and trigger colliders
+            if(hit != playerCollider && !hit.isTrigger)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
 
     void OnMove(InputValue value)
     {
