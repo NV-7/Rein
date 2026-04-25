@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Spawner : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class Spawner : MonoBehaviour
     public float time = 0f;
     public float spawnRate = 1f;
     public GameObject cube;
+    public int maxEnemey = 5;
+    private int counter = 0;
     private float max_X, max_Z, min_X, min_Z, top;
 
     private Renderer cubeRenderer;
@@ -32,10 +36,11 @@ public class Spawner : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
-        if(time >= spawnRate)
+        if(time >= spawnRate && counter < maxEnemey)
         {
             SpawnEnemy();
             time = 0f;
+            
         }
     }
 
@@ -43,11 +48,25 @@ public class Spawner : MonoBehaviour
     {
         float randomX = Random.Range(min_X, max_X);
         float randomZ = Random.Range(min_Z, max_Z);
+        float enemyRadius =  1.5f;
         Transform enemyTransform = stationary_enemy.transform;
         float yOffset = Mathf.Abs(enemyTransform.position.y - top);
         Vector3 spawnPoint = new Vector3(randomX, top + yOffset, randomZ);
 
-        GameObject enemy = Instantiate(stationary_enemy, spawnPoint, Quaternion.identity);
+        //Check if enemy is spawned on another
+        SphereCollider enemyCollider = stationary_enemy.GetComponent<SphereCollider>();
+        if(enemyCollider != null)
+        {
+            enemyRadius = enemyCollider.radius;
+        }
 
+
+        Collider[] hit = Physics.OverlapSphere(spawnPoint, enemyRadius);
+
+        if(hit.Length == 0)
+        {
+            GameObject enemy = Instantiate(stationary_enemy, spawnPoint, Quaternion.identity);
+            counter++;
+        }
     }
 }
