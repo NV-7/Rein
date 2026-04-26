@@ -1,3 +1,4 @@
+using MCPForUnity.Editor.Constants;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class PlayerScript : MonoBehaviour
     public float fireRate = 0.3f;
     public float bulletSpeed = 20f;
     public Transform firePoint;
+    public int hits = 3;
 
     private float time = 0f;
     void Start()
@@ -25,8 +27,20 @@ public class PlayerScript : MonoBehaviour
             FireBullet();
             time = Time.time + fireRate;
         }
-
         
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("BulletEnemy"))
+        {
+            hits--;
+            Destroy(other.gameObject);
+            if (hits <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     private void FixedUpdate()

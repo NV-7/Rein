@@ -14,6 +14,7 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         //bulletSound = this.GetComponent<AudioSource>();
         //bulletSound.Play();
         //bulletParticle = this.GetComponent<ParticleSystem>();

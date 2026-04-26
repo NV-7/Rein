@@ -11,10 +11,18 @@ public class enemyStationary_behavior : MonoBehaviour
     public float health = 100f;
     private GameObject player;
     private float time = 0f;
+    private GameObject spawner;
+    private GameObject firePoint;
     
     void Start()
     {
+        spawner = GameObject.FindGameObjectWithTag("Respawn");
         player = GameObject.FindGameObjectWithTag("Player");
+        firePoint = transform.GetChild(0).gameObject;
+        Vector3 firePointPosition = firePoint.transform.position;
+        firePointPosition *= 1.1f;
+        firePoint.transform.position = firePointPosition;
+        
     }
 
     // Update is called once per frame
@@ -23,13 +31,18 @@ public class enemyStationary_behavior : MonoBehaviour
          time += Time.deltaTime;
         if(time  >= fireRate)
         {
-            FireBullet();
+            FireBulletSpin();
             time = 0f;
         }
 
         if (health <= 0f)
         {
             Destroy(gameObject);
+        }
+
+        if(player == null)
+        {
+            GameObject.FindGameObjectsWithTag("Player");
         }
     }
 
@@ -38,6 +51,26 @@ public class enemyStationary_behavior : MonoBehaviour
         Vector3 direction = (player.transform.position - transform.position).normalized;
         GameObject b = Instantiate(bullet, transform.position, Quaternion.identity);
         b.GetComponent<Rigidbody>().velocity = direction * 10f;
+    }
+
+    private void FireBulletSpin()
+    {
+
+        Vector3 direction = transform.position - firePoint.transform.position;
+        GameObject b = Instantiate(bullet, transform.position, Quaternion.identity);
+        b.GetComponent<Rigidbody>().velocity = direction * 10f;
+        
+
+    }
+
+    private void rotateFirePoint()
+    {
+
+    }
+
+    private void FireBulletSpiral()
+    {
+
     }
 
     private void OnTriggerEnter(Collider other)
