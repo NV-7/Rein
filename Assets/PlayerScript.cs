@@ -16,6 +16,11 @@ public class PlayerScript : MonoBehaviour
     private float time = 0f;
     void Start()
     {
+       
+    }
+
+    private void Awake()
+    {
         firePoint = transform.GetChild(1);
     }
 

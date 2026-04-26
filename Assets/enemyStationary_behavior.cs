@@ -16,15 +16,22 @@ public class enemyStationary_behavior : MonoBehaviour
     
     void Start()
     {
-        spawner = GameObject.FindGameObjectWithTag("Respawn");
-        player = GameObject.FindGameObjectWithTag("Player");
-        firePoint = transform.GetChild(0).gameObject;
-        Vector3 firePointPosition = firePoint.transform.position;
-        firePointPosition *= 1.1f;
-        firePoint.transform.position = firePointPosition;
+        
+       
+      
         
     }
 
+    private void Awake()
+    {
+        spawner = GameObject.FindGameObjectWithTag("Respawn");
+        player = GameObject.FindGameObjectWithTag("Player");
+        if(transform.childCount > 0)
+        {
+        firePoint = transform.GetChild(0).gameObject;
+        Vector3 firePointPosition = firePoint.transform.position;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -55,9 +62,15 @@ public class enemyStationary_behavior : MonoBehaviour
 
     private void FireBulletSpin()
     {
-
-        Vector3 direction = transform.position - firePoint.transform.position;
+        if(firePoint == null)
+        {
+            Debug.Log("Fire point not found!");
+            return;
+        }
+        Vector3 direction = firePoint.transform.position - transform.position;
+        GameObject a = Instantiate(bullet, transform.position, Quaternion.identity);
         GameObject b = Instantiate(bullet, transform.position, Quaternion.identity);
+        a.GetComponent<Rigidbody>().velocity = -direction * 10f;
         b.GetComponent<Rigidbody>().velocity = direction * 10f;
         
 
