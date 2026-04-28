@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e7b41076de652742b66db49452ac61f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  despawn: 10
+  despawn: 20
 --- !u!198 &-1059747450761103390
 ParticleSystem:
   m_ObjectHideFlags: 0

@@ -22,6 +22,8 @@ public class enemyStationary_behavior : MonoBehaviour
     public float health = 150f;
     public int bulletCount = 8; // Number of bullets to shoot in a circle
     public FireMode fireMode = FireMode.FireBullet;
+    public AudioSource hitSound;
+    public float bulletSpeed = 10f;
     private GameObject player;
     private float time = 0f;
     private GameObject spawner;
@@ -38,6 +40,7 @@ public class enemyStationary_behavior : MonoBehaviour
     {
         spawner = GameObject.FindGameObjectWithTag("Respawn");
         player = GameObject.FindGameObjectWithTag("Player");
+        hitSound = GetComponent<AudioSource>();
         if(transform.childCount > 0)
         {
             firePoint = transform.GetChild(0).gameObject;
@@ -108,7 +111,7 @@ public class enemyStationary_behavior : MonoBehaviour
         
         Vector3 direction = (player.transform.position - transform.position).normalized;
         GameObject b = Instantiate(bullets[0], transform.position, Quaternion.identity);
-        b.GetComponent<Rigidbody>().velocity = direction * 10f;
+        b.GetComponent<Rigidbody>().velocity = direction * bulletSpeed;
     }
 
     private void FireBulletSpin()
@@ -128,13 +131,13 @@ public class enemyStationary_behavior : MonoBehaviour
         Vector3 direction = firePoint.transform.position - transform.position;
         GameObject a = Instantiate(bulletD, transform.position, Quaternion.identity);
         GameObject b = Instantiate(bulletD, transform.position, Quaternion.identity);
-        a.GetComponent<Rigidbody>().velocity = -direction * 10f;
-        b.GetComponent<Rigidbody>().velocity = direction * 10f;
+        a.GetComponent<Rigidbody>().velocity = -direction * bulletSpeed;
+        b.GetComponent<Rigidbody>().velocity = direction * bulletSpeed;
     }
 
     private void FireBulletCircle()
     {
-        fireRate = 0.8f;
+        fireRate = 0.6f;
         Debug.Log($"[FireBulletCircle ENTRY] {gameObject.name} - bullet: {(bulletD != null ? bulletD.name : "NULL")}");
         
         if (bulletD == null)
@@ -167,7 +170,7 @@ public class enemyStationary_behavior : MonoBehaviour
                 Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
-                    rb.velocity = direction * 10f;
+                    rb.velocity = direction * bulletSpeed;
                 }
                 else
                 {
@@ -191,13 +194,13 @@ public class enemyStationary_behavior : MonoBehaviour
             float angle = i * angleStep * Mathf.Deg2Rad;
             Vector3 direction = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
 
-            GameObject bulletInstance = Instantiate(bulletD, transform.position, Quaternion.identity);
+            GameObject bulletInstance = Instantiate(i % 2 == 0 ? bulletD: bulletI , transform.position, Quaternion.identity);
             if (bulletInstance != null)
             {
                 Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
-                    rb.velocity = direction * 10f;
+                    rb.velocity = direction * bulletSpeed;
                 }
                 else
                 {
@@ -214,7 +217,7 @@ public class enemyStationary_behavior : MonoBehaviour
 
     private void FireBulletSporadic()
     {
-        fireRate = 0.3f;
+        fireRate = 0.25f;
         int randomStep = Random.Range(5, 9);
         float angleStep = 365f / randomStep;
         GameObject bulletInstance;
@@ -224,13 +227,13 @@ public class enemyStationary_behavior : MonoBehaviour
             float angleShift = Random.Range(0f, 15f);
             Vector3 direction = new Vector3(Mathf.Cos(angle + angleShift), 0f, Mathf.Sin(angle + angleShift));
            
-            bulletInstance = Instantiate(bulletD, transform.position, Quaternion.identity);
+            bulletInstance = Instantiate(Random.Range(0,1) % 2 == 0 ? bulletD: bulletI, transform.position, Quaternion.identity);
             if (bulletInstance != null)
             {
                 Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
-                    rb.velocity = direction * 10f;
+                    rb.velocity = direction * bulletSpeed;
                 }
                 else
                 {
@@ -269,7 +272,7 @@ public class enemyStationary_behavior : MonoBehaviour
                 Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
-                    rb.velocity = direction * 10f;
+                    rb.velocity = direction * bulletSpeed;
                 }
                 else
                 {
@@ -293,6 +296,7 @@ public class enemyStationary_behavior : MonoBehaviour
     {
         if (other.CompareTag("Bullet"))
         {
+            hitSound.Play();
             health -= 25f;
             Destroy(other.gameObject);
             

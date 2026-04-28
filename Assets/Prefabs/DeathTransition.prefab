@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Wave Complete
+  m_text: 'You Die
 
 '
   m_isRightToLeft: 0
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 595503603956921297}
   - component: {fileID: 4128276203196999481}
   m_Layer: 5
-  m_Name: Transition
+  m_Name: DeathTransition
   m_TagString: Transition
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

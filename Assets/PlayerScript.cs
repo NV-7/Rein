@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 public class PlayerScript : MonoBehaviour
 {
 
@@ -14,6 +15,9 @@ public class PlayerScript : MonoBehaviour
     public float bulletSpeed = 20f;
     public Transform firePoint;
     public float immuneTime = 1.5f;
+    public AudioSource shootSound;
+    public GameObject transition;
+    public bool isAlive = true;
     private float immuneTimer = 0f;
     private int hits = -1;
     private MeshRenderer left;
@@ -21,6 +25,7 @@ public class PlayerScript : MonoBehaviour
     private MeshRenderer right;
     private List<MeshRenderer> parts;
     private Boolean immune = false;
+    private bool deathSequenceStarted = false; // NEW: Prevent multiple death calls
 
     private float time = 0f;
     void Start()
@@ -33,7 +38,10 @@ public class PlayerScript : MonoBehaviour
     private void Awake()
     {
         firePoint = transform.GetChild(1);
+        shootSound = GetComponent<AudioSource>();
+        transition = transform.GetChild(2).gameObject;
         GameObject model = transform.GetChild(0).gameObject;
+        
         left = model.transform.GetChild(0).GetComponent<MeshRenderer>();
         main = model.transform.GetChild(1).GetComponent<MeshRenderer>();
         right = model.transform.GetChild(2).GetComponent<MeshRenderer>();
@@ -46,6 +54,9 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+        if(!isAlive) return;
+        
        if(Input.GetMouseButton(0) && Time.time >= time)
         {
             FireBullet();
@@ -66,6 +77,9 @@ public class PlayerScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // FIXED: Don't process hits if already dead
+        if(!isAlive) return;
+        
         if (other.CompareTag("BulletIndestructable") || other.CompareTag("BulletDestructable"))
         {
             Debug.Log("Tagged");
@@ -74,14 +88,20 @@ public class PlayerScript : MonoBehaviour
                 immune = true;
                 hits++;
                 Destroy(other.gameObject);
+                
+                // FIXED: Disable part first, then check for death
+                if(hits < parts.Count)
+                {
+                    MeshRenderer partToDisable = parts[hits];
+                    if (partToDisable != null)
+                    {
+                        partToDisable.enabled = false;
+                    }
+                }
+                
                 if (hits == 2)
                 {
-                    Destroy(gameObject);
-                }
-                MeshRenderer partToDisable = parts[hits];
-                if (partToDisable != null)
-                {
-                    partToDisable.enabled = false;
+                    Die(); // FIXED: Call Die() method instead of destroying immediately
                 }
                 
             }
@@ -96,6 +116,7 @@ public class PlayerScript : MonoBehaviour
 
     void FireBullet()
     {
+        shootSound.Play();
         Vector3 direction = firePoint.forward;
         Quaternion rotation = Quaternion.LookRotation(direction);
        // rotation.y -= 90f;
@@ -103,9 +124,43 @@ public class PlayerScript : MonoBehaviour
         b.GetComponent<Rigidbody>().velocity = direction * bulletSpeed;
     }
 
+   
+    void Die()
+    {
+        if(deathSequenceStarted) return; // Prevent multiple calls
+        
+        deathSequenceStarted = true;
+        isAlive = false;
+        
+       
+        Collider col = GetComponent<Collider>();
+        if(col != null)
+        {
+            col.enabled = false;
+        }
+        
+        Movement movement = GetComponent<Movement>();
+        if(movement != null)
+        {
+            movement.enabled = false;
+        }
+        
+        // Start death sequence
+        StartCoroutine(handleDeath());
+    }
+
+    IEnumerator handleDeath()
+    {
+        transition.SetActive(true);
+        transition.GetComponent<Animator>().SetTrigger("Start");
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene(0);
+       
+    }
+
     void OnClick(InputAction input)
     {
-        if (input.IsPressed())
+        if (input.IsPressed() && isAlive) // FIXED: Check if alive
         {
             FireBullet();
         }

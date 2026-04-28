@@ -11,12 +11,14 @@ public class Spawner : MonoBehaviour
     public GameObject stationary_enemy;
     public GameObject moving_enemy;
     public GameObject player;
+    public GameObject transition;
     public float spawnRadius = 10f;
     public float time = 0f;
     public float spawnRate = 1f;
     public GameObject cube;
     public int maxEnemey = 5;
     public int mode = 0; // 0 for stationary, 1 for moving
+    
     private int counter = 0;
     private float max_X, max_Z, min_X, min_Z, top;
     private enemyStationary_behavior enemyBehavior;
@@ -27,6 +29,7 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         cube = transform.parent.gameObject;
+        transition = transform.GetChild(0).gameObject;
         cubeRenderer = cube.GetComponent<Renderer>();
         max_X = cubeRenderer.bounds.max.x;
         max_Z = cubeRenderer.bounds.max.z;
@@ -53,7 +56,7 @@ public class Spawner : MonoBehaviour
         if(maxEnemey <= 0)
         {
             Debug.Log("No enemies left!");
-            loadScene();
+            StartCoroutine(transitionScene());
         }
     }
 
@@ -114,16 +117,26 @@ public class Spawner : MonoBehaviour
     {
         if(mode == 0)
         {
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(2);
         }else if(mode == 1)
         {
-            SceneManager.LoadScene(4);
+            SceneManager.LoadScene(3);
         }
         else
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
+
+    IEnumerator transitionScene()
+    {
+        transition.SetActive(true);
+        transition.GetComponent<Animator>().SetTrigger("Start");
+        yield return new WaitForSeconds(2f);
+        loadScene();
+    }
+
+ 
 
     void SpawnPlayer()
     {

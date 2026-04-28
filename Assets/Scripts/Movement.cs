@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -13,6 +12,10 @@ public class Movement : MonoBehaviour
     private Rigidbody playerRb;
     private Camera mainCam;
     private BoxCollider playerCollider;
+    
+    // Play area boundaries
+    private float max_X, max_Z, min_X, min_Z;
+    private bool boundsInitialized = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +24,10 @@ public class Movement : MonoBehaviour
         mainCam = Camera.main;
         playerCollider = GetComponent<BoxCollider>();
         
-        // Validate setup
+        
+        InitializePlayAreaBounds();
+        
+      
         if (playerRb == null)
         {
             Debug.LogError("Rigidbody missing!");
@@ -37,6 +43,30 @@ public class Movement : MonoBehaviour
         }
         
         Debug.Log($"MoveSpeed: {moveSpeed}");
+    }
+
+    void InitializePlayAreaBounds()
+    {
+       
+        Spawner spawner = FindObjectOfType<Spawner>();
+        if (spawner != null && spawner.cube != null)
+        {
+            Renderer cubeRenderer = spawner.cube.GetComponent<Renderer>();
+            if (cubeRenderer != null)
+            {
+                max_X = cubeRenderer.bounds.max.x;
+                max_Z = cubeRenderer.bounds.max.z;
+                min_X = cubeRenderer.bounds.min.x;
+                min_Z = cubeRenderer.bounds.min.z;
+                boundsInitialized = true;
+               
+            }
+        }
+        
+        if (!boundsInitialized)
+        {
+            Debug.LogWarning("Could not initialize play area bounds! Player movement will not be constrained.");
+        }
     }
 
     // Update is called once per frame
@@ -57,6 +87,17 @@ public class Movement : MonoBehaviour
         
         Vector3 movement = new Vector3(movementInput.x, 0f, movementInput.y);
         Vector3 targetPos = playerRb.position + movement * moveSpeed * Time.fixedDeltaTime;
+
+        // Clamp position to play area bounds
+        if (boundsInitialized)
+        {
+            // Account for player collider size to prevent clipping through edges
+            float playerHalfSizeX = playerCollider.size.x / 2f;
+            float playerHalfSizeZ = playerCollider.size.z / 2f;
+            
+            targetPos.x = Mathf.Clamp(targetPos.x, min_X + playerHalfSizeX, max_X - playerHalfSizeX);
+            targetPos.z = Mathf.Clamp(targetPos.z, min_Z + playerHalfSizeZ, max_Z - playerHalfSizeZ);
+        }
 
         Debug.Log($"Current Pos: {playerRb.position}, Target Pos: {targetPos}");
         
