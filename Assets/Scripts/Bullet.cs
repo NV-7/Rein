@@ -42,6 +42,10 @@ public class Bullet : MonoBehaviour
         if (other_tag.Equals("BulletDestructable") && objectTag.Equals("Bullet"))
         {
             Destroy(other.gameObject);
+            Destroy(gameObject);
+        }else if(other_tag.Equals("BulletIndestructable") && objectTag.Equals("Bullet"))
+        {
+            Destroy(gameObject);
         }
     }
 

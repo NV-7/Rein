@@ -6,7 +6,8 @@ using UnityEditor.Tilemaps;
 public class enemyStationary_behavior : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject bullet;
+    public GameObject bulletD;
+    public GameObject bulletI;
     public float fireRate = 1f;
     public float health = 100f;
     public int bulletCount = 8; // Number of bullets to shoot in a circle
@@ -15,10 +16,11 @@ public class enemyStationary_behavior : MonoBehaviour
     private float time = 0f;
     private GameObject spawner;
     private GameObject firePoint;
+    private List<GameObject> bullets;
     
     void Start()
     {
-        Debug.Log($"[START] {gameObject.name} - bullet: {(bullet != null ? bullet.name : "NULL")}");
+        Debug.Log($"[START] {gameObject.name} - bullet: {(bulletD != null ? bulletD.name : "NULL")}");
     }
 
     private void Awake()
@@ -30,6 +32,9 @@ public class enemyStationary_behavior : MonoBehaviour
             firePoint = transform.GetChild(0).gameObject;
             Vector3 firePointPosition = firePoint.transform.position;
         }
+        bullets = new List<GameObject>();
+        bullets.Add(bulletD);
+        bullets.Add(bulletI);
     }
     
     // Update is called once per frame
@@ -55,14 +60,14 @@ public class enemyStationary_behavior : MonoBehaviour
 
     private void FireBullet()
     {
-        if (bullet == null)
+        if (bulletD == null)
         {
             Debug.LogError($"[FireBullet] {gameObject.name} - bullet is NULL!");
             return;
         }
         
         Vector3 direction = (player.transform.position - transform.position).normalized;
-        GameObject b = Instantiate(bullet, transform.position, Quaternion.identity);
+        GameObject b = Instantiate(bullets[0], transform.position, Quaternion.identity);
         b.GetComponent<Rigidbody>().velocity = direction * 10f;
     }
 
@@ -73,24 +78,24 @@ public class enemyStationary_behavior : MonoBehaviour
             Debug.Log("Fire point not found!");
             return;
         }
-        if (bullet == null)
+        if (bulletD == null)
         {
             Debug.LogError($"[FireBulletSpin] {gameObject.name} - bullet is NULL!");
             return;
         }
         
         Vector3 direction = firePoint.transform.position - transform.position;
-        GameObject a = Instantiate(bullet, transform.position, Quaternion.identity);
-        GameObject b = Instantiate(bullet, transform.position, Quaternion.identity);
+        GameObject a = Instantiate(bulletD, transform.position, Quaternion.identity);
+        GameObject b = Instantiate(bulletD, transform.position, Quaternion.identity);
         a.GetComponent<Rigidbody>().velocity = -direction * 10f;
         b.GetComponent<Rigidbody>().velocity = direction * 10f;
     }
 
     private void FireBulletCircle()
     {
-        Debug.Log($"[FireBulletCircle ENTRY] {gameObject.name} - bullet: {(bullet != null ? bullet.name : "NULL")}");
+        Debug.Log($"[FireBulletCircle ENTRY] {gameObject.name} - bullet: {(bulletD != null ? bulletD.name : "NULL")}");
         
-        if (bullet == null)
+        if (bulletD == null)
         {
             Debug.LogError($"[FireBulletCircle] {gameObject.name} - bullet is NULL!");
             return;
@@ -105,7 +110,7 @@ public class enemyStationary_behavior : MonoBehaviour
             float angle = i * angleStep * Mathf.Deg2Rad;
             Vector3 direction = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
 
-            GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
+            GameObject bulletInstance = Instantiate(bulletD, transform.position, Quaternion.identity);
             if (bulletInstance != null)
             {
                 Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
@@ -135,7 +140,7 @@ public class enemyStationary_behavior : MonoBehaviour
             float angle = i * angleStep * Mathf.Deg2Rad;
             Vector3 direction = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
 
-            GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
+            GameObject bulletInstance = Instantiate(bulletD, transform.position, Quaternion.identity);
             if (bulletInstance != null)
             {
                 Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
@@ -166,7 +171,7 @@ public class enemyStationary_behavior : MonoBehaviour
             float angleShift = Random.Range(0f, 15f);
             Vector3 direction = new Vector3(Mathf.Cos(angle + angleShift), 0f, Mathf.Sin(angle + angleShift));
 
-            GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
+            GameObject bulletInstance = Instantiate(bulletD, transform.position, Quaternion.identity);
             if (bulletInstance != null)
             {
                 Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();

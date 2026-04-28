@@ -13,7 +13,7 @@ public class Spawner : MonoBehaviour
     public float spawnRadius = 10f;
     public float time = 0f;
     public float spawnRate = 1f;
-    public GameObject playArea;
+    public GameObject cube;
     public int maxEnemey = 5;
     private int counter = 0;
     private float max_X, max_Z, min_X, min_Z, top;
@@ -21,8 +21,8 @@ public class Spawner : MonoBehaviour
     private Renderer cubeRenderer;
     void Start()
     {
-        playArea = transform.parent.gameObject;
-        cubeRenderer = playArea.GetComponent<Renderer>();
+        cube = transform.parent.gameObject;
+        cubeRenderer = cube.GetComponent<Renderer>();
         max_X = cubeRenderer.bounds.max.x;
         max_Z = cubeRenderer.bounds.max.z;
         min_X = cubeRenderer.bounds.min.x;
@@ -30,6 +30,7 @@ public class Spawner : MonoBehaviour
         top = cubeRenderer.bounds.max.y;
 
         Debug.Log($"Spawn bounds — X: [{min_X}, {max_X}] Z: [{min_Z}, {max_Z}] Top: {top}");
+        SpawnPlayer();
     }
 
     // Update is called once per frame
@@ -49,13 +50,14 @@ public class Spawner : MonoBehaviour
         float randomX = Random.Range(min_X, max_X);
         float randomZ = Random.Range(min_Z, max_Z);
         float enemyRadius =  1.5f;
+        Renderer enemyRenderer = stationary_enemy.gameObject.GetComponent<Renderer>();
         Transform enemyTransform = stationary_enemy.transform;
-        float yOffset = Mathf.Abs(enemyTransform.position.y - top);
+        float yOffset = Mathf.Abs(enemyTransform.position.y - enemyRenderer.bounds.min.y);
         Vector3 spawnPoint = new Vector3(randomX, top + yOffset, randomZ);
 
         //Check if enemy is spawned on another
         SphereCollider enemyCollider = stationary_enemy.GetComponent<SphereCollider>();
-        if(enemyCollider != null)
+        if (enemyCollider != null)
         {
             enemyRadius = enemyCollider.radius;
         }
@@ -68,5 +70,15 @@ public class Spawner : MonoBehaviour
             GameObject enemy = Instantiate(stationary_enemy, spawnPoint, Quaternion.identity);
             counter++;
         }
+    }
+
+    void SpawnPlayer()
+    {
+       
+        Vector3 spawnPoint = new Vector3((max_X + min_X) / 2 , top + 3.5f, (max_Z + min_Z)/2);
+        Instantiate(player, spawnPoint, Quaternion.identity);
+
+
+
     }
 }

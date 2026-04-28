@@ -151,7 +151,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stationary_enemy: {fileID: 8600447798302972477, guid: e0af3514ab0a0234c8e32ff8330712b9, type: 3}
-  player: {fileID: 4633626972849602854, guid: ce6494f695bded444a5e7e32a3ee5d86, type: 3}
+  player: {fileID: 6994359596621085473, guid: 2cf8989c0a93eaf4f88a5e9df87d9a9b, type: 3}
   spawnRadius: 10
   time: 0
+  spawnRate: 1
   cube: {fileID: 0}
+  maxEnemey: 5

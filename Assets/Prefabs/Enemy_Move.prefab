@@ -205,6 +205,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c41cec5256a6a4db197e7ae5712f85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 0}
+  bulletD: {fileID: 6269892458829435262, guid: 5aa2943878c547b409582e7ec8b62aa5, type: 3}
+  bulletI: {fileID: 6269892458829435262, guid: 2c2694120d7489f41bfca32f6dcf223a, type: 3}
   fireRate: 1
   health: 100
+  bulletCount: 8
+  fireMode: 0
