@@ -175,7 +175,7 @@ MonoBehaviour:
   fireRate: 0.5
   health: 100
   bulletCount: 10
-  fireMode: 0
+  fireMode: 4
 --- !u!135 &-1138195876270521501
 SphereCollider:
   m_ObjectHideFlags: 0

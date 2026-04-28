@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stationary_enemy: {fileID: 8600447798302972477, guid: e0af3514ab0a0234c8e32ff8330712b9, type: 3}
+  moving_enemy: {fileID: 4503979936646047752, guid: 6b6820592cc99bc4ea181f88bd850d8e, type: 3}
   player: {fileID: 6994359596621085473, guid: 2cf8989c0a93eaf4f88a5e9df87d9a9b, type: 3}
   spawnRadius: 10
   time: 0

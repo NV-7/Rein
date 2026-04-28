@@ -7,8 +7,9 @@ using UnityEngine.Rendering;
 
 public class Spawner : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Start is called before the first frame update  
     public GameObject stationary_enemy;
+    public GameObject moving_enemy;
     public GameObject player;
     public float spawnRadius = 10f;
     public float time = 0f;
@@ -67,7 +68,8 @@ public class Spawner : MonoBehaviour
 
         if(hit.Length == 0)
         {
-            GameObject enemy = Instantiate(stationary_enemy, spawnPoint, Quaternion.identity);
+            GameObject enemy = Instantiate(moving_enemy, spawnPoint, Quaternion.identity);
+            enemy.GetComponent<enemyStationary_behavior>().fireMode = FireMode.Spiral;
             counter++;
         }
     }
