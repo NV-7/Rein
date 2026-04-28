@@ -36,9 +36,16 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        String objectTag = gameObject.tag;
         String other_tag = other.gameObject.tag;
         Debug.Log("Bullet Triggered with " + other_tag);
+        if (other_tag.Equals("BulletDestructable") && objectTag.Equals("Bullet"))
+        {
+            Destroy(other.gameObject);
+        }
     }
+
+    
 
 
 }

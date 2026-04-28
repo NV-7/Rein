@@ -13,7 +13,7 @@ public class Spawner : MonoBehaviour
     public float spawnRadius = 10f;
     public float time = 0f;
     public float spawnRate = 1f;
-    public GameObject cube;
+    public GameObject playArea;
     public int maxEnemey = 5;
     private int counter = 0;
     private float max_X, max_Z, min_X, min_Z, top;
@@ -21,8 +21,8 @@ public class Spawner : MonoBehaviour
     private Renderer cubeRenderer;
     void Start()
     {
-        cube = transform.parent.gameObject;
-        cubeRenderer = cube.GetComponent<Renderer>();
+        playArea = transform.parent.gameObject;
+        cubeRenderer = playArea.GetComponent<Renderer>();
         max_X = cubeRenderer.bounds.max.x;
         max_Z = cubeRenderer.bounds.max.z;
         min_X = cubeRenderer.bounds.min.x;
