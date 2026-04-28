@@ -1295,6 +1295,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1880413631204993557, guid: ffee150a1e778c349825676018a47a39, type: 3}
+      propertyPath: mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880413631204993557, guid: ffee150a1e778c349825676018a47a39, type: 3}
+      propertyPath: maxEnemey
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5785243831822966451, guid: ffee150a1e778c349825676018a47a39, type: 3}
       propertyPath: m_Name
       value: Cube

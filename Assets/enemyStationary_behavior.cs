@@ -99,6 +99,7 @@ public class enemyStationary_behavior : MonoBehaviour
 
     private void FireBullet()
     {
+        fireRate = 0.25f;
         if (bulletD == null)
         {
             Debug.LogError($"[FireBullet] {gameObject.name} - bullet is NULL!");
@@ -112,6 +113,7 @@ public class enemyStationary_behavior : MonoBehaviour
 
     private void FireBulletSpin()
     {
+        fireRate= 0.25f;
         if(firePoint == null)
         {
             Debug.Log("Fire point not found!");
@@ -132,6 +134,7 @@ public class enemyStationary_behavior : MonoBehaviour
 
     private void FireBulletCircle()
     {
+        fireRate = 0.8f;
         Debug.Log($"[FireBulletCircle ENTRY] {gameObject.name} - bullet: {(bulletD != null ? bulletD.name : "NULL")}");
         
         if (bulletD == null)
@@ -211,6 +214,7 @@ public class enemyStationary_behavior : MonoBehaviour
 
     private void FireBulletSporadic()
     {
+        fireRate = 0.3f;
         int randomStep = Random.Range(5, 9);
         float angleStep = 365f / randomStep;
         GameObject bulletInstance;
