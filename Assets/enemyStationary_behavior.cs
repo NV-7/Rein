@@ -19,7 +19,7 @@ public class enemyStationary_behavior : MonoBehaviour
     public GameObject bulletD;
     public GameObject bulletI;
     public float fireRate = 1f;
-    public float health = 100f;
+    public float health = 150f;
     public int bulletCount = 8; // Number of bullets to shoot in a circle
     public FireMode fireMode = FireMode.FireBullet;
     private GameObject player;
@@ -60,7 +60,8 @@ public class enemyStationary_behavior : MonoBehaviour
 
         if (health <= 0f)
         {
-            Destroy(gameObject);
+            EnemyDestruction();
+            
         }
 
         if(player == null)
@@ -278,12 +279,23 @@ public class enemyStationary_behavior : MonoBehaviour
         }
     }
 
+    private void EnemyDestruction()
+    {
+        spawner.GetComponent<Spawner>().maxEnemey--;
+        Destroy(gameObject);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Bullet"))
         {
             health -= 25f;
             Destroy(other.gameObject);
+            
         }
+    }
+    private void OnDestroy()
+    {
+      
     }
 }

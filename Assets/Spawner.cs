@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class Spawner : MonoBehaviour
 {
@@ -38,11 +39,16 @@ public class Spawner : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
-        if(time >= spawnRate && counter < maxEnemey)
+        if(counter < maxEnemey)
         {
             SpawnEnemy();
             time = 0f;
             
+        }
+        if(maxEnemey <= 0)
+        {
+            Debug.Log("Maximum number of enemies reached!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
